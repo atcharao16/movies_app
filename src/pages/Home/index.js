@@ -3,12 +3,11 @@ import Navbar from "../../components/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getMovies } from "../../apis/movies";
 import MovieCard from '../../components/movieComponent'
-import '../../App.css'
+
 const Home = () => {
     const dispatch = useDispatch();
 
     const { movies } = useSelector(state => state.movies);
-    console.log(movies);
 
     useEffect(() => {
         dispatch(getMovies());
@@ -19,18 +18,17 @@ const Home = () => {
             <Navbar />
 
             <div style={{
-                paddingTop : '60px',
-                alignContent : 'center'
+                paddingTop: '60px',
+                alignContent: 'center'
             }}>
-                <main 
+                <main
                     style={{
-                        display : 'flex',
-                        gap : '4px',
-                        flexWrap : 'wrap',
+                        display: 'flex',
+                        gap: '4px',
+                        flexWrap: 'wrap',
                     }}
                 >
                     {
-                        //TODO
                         movies?.length > 0 && movies.map(movie => <MovieCard key={movie.id} movie={movie} />)
                     }
                 </main>

@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import {AppBar, Box, Toolbar, Typography, InputBase} from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectorComponent from '../selectorComponent/index'
+import { useDispatch, useSelector } from 'react-redux';
+// import { setSearchValue } from '../../slices/movieslice';  ---> Locally searching
+import { getMoviesBySearch } from "../../apis/movies"
+import { debounce } from 'lodash';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -23,7 +27,7 @@ const Search = styled('div')(({ theme }) => ({
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
-    position: 'absolute',  
+    position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
@@ -45,12 +49,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
-    
+    const dispatch = useDispatch();
+
+    const onSearchChange = debounce((e) => {
+        dispatch(getMoviesBySearch(e.target.value))
+    }, 1000)
+
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    
+
                     <Typography
                         variant="h6"
                         noWrap
@@ -59,7 +69,7 @@ export default function Navbar() {
                     >
                         Movies App
                     </Typography>
-                    <Search>
+                    <Search onChange={(e) => onSearchChange(e)}>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
@@ -70,11 +80,11 @@ export default function Navbar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        
-                    <SelectorComponent/> 
-                    <SelectorComponent/>   
+
+                        <SelectorComponent />
+
                     </Box>
-                    
+
                 </Toolbar>
             </AppBar>
         </Box>
